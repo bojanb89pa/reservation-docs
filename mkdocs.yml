@@ -28,10 +28,11 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
 
-# The only place that names the environment. Pages refer to it as
-# "the API base" and link to Getting started for the concrete URLs.
+# Environment URLs are listed once, in the table at the top of
+# docs/getting-started.md. Examples spell out the staging URL so that they
+# can be copied as they are. When production arrives, add it to that table
+# and update the examples in one pass.
 extra:
-  api_base: https://reserva.bojanlab.com
   status: preview
 
 nav:
