@@ -1,0 +1,34 @@
+name: PR check
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Build the site (strict)
+        run: mkdocs build --strict
+
+      - name: Endpoints named in the guides exist in the OpenAPI documents
+        run: python scripts/check-endpoints.py
+
+      - name: English only (no Serbian letters outside the generated OpenAPI documents)
+        run: |
+          if grep -rnP '[čćžšđČĆŽŠĐ]' docs README.md mkdocs.yml --exclude-dir=openapi; then
+            echo "::error::Serbian letters found. Everything in this repository is in English."
+            exit 1
+          fi

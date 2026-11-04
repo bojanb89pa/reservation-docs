@@ -1,0 +1,2323 @@
+{
+  "components": {
+    "schemas": {
+      "Business": {
+        "properties": {
+          "allowOverlappingPendingReservations": {
+            "type": "boolean"
+          },
+          "cancellationPolicy": {
+            "$ref": "#/components/schemas/BusinessCancellationPolicy"
+          },
+          "category": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BusinessCategory"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "categoryId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "image": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/StoredFile"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PENDING",
+              "ACTIVE",
+              "REJECTED",
+              "DELETED"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "BusinessCancellationPolicy": {
+        "properties": {
+          "allowedStatuses": {
+            "items": {
+              "enum": [
+                "PENDING_APPROVAL",
+                "CONFIRMED",
+                "REJECTED",
+                "CANCELLED"
+              ],
+              "type": "string"
+            },
+            "type": "array",
+            "uniqueItems": true
+          }
+        },
+        "type": "object"
+      },
+      "BusinessCategory": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "symbol": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "BusinessCategoryResponse": {
+        "properties": {
+          "color": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "parentId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "symbol": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "BusinessLocationResponse": {
+        "properties": {
+          "addressLine1": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "addressLine2": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "businessId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "city": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "countryCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "googleMapsUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "googlePlaceId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "latitude": {
+            "type": "number"
+          },
+          "longitude": {
+            "type": "number"
+          },
+          "name": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ownerConfirmed": {
+            "type": "boolean"
+          },
+          "phone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "postalCode": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "timezone": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "website": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "BusinessResponse": {
+        "properties": {
+          "allowOverlappingPendingReservations": {
+            "type": "boolean"
+          },
+          "category": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BusinessCategoryResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "categoryId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "BusinessService": {
+        "properties": {
+          "businessId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "durationStep": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "durationUnit": {
+            "enum": [
+              "MINUTES",
+              "HOURS",
+              "DAYS"
+            ],
+            "type": "string"
+          },
+          "fixedDuration": {
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "maxDuration": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "minDuration": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "BusinessServiceResponse": {
+        "properties": {
+          "businessId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "durationStep": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "durationUnit": {
+            "enum": [
+              "MINUTES",
+              "HOURS",
+              "DAYS"
+            ],
+            "type": "string"
+          },
+          "fixedDuration": {
+            "type": "boolean"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxDuration": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "minDuration": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ClientApplicationWidgetConfigResponse": {
+        "properties": {
+          "clientApplicationId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "locations": {
+            "items": {
+              "$ref": "#/components/schemas/ClientApplicationWidgetLocationResponse"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "ClientApplicationWidgetLocationResponse": {
+        "properties": {
+          "businessId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "businessName": {
+            "type": "string"
+          },
+          "locationId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "locationName": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "CreateReservationByClientApplicationRequest": {
+        "description": "Request to book a reservation on behalf of the partner's end user",
+        "properties": {
+          "endTime": {
+            "description": "End of the reservation (ISO 8601, business local time)",
+            "example": "2026-11-03T10:45:00",
+            "format": "date-time",
+            "type": "string"
+          },
+          "locationId": {
+            "description": "ID of the business location where the service is delivered",
+            "example": "5a1f0c2e-8b7d-4e3a-9c6b-0d1e2f3a4b5c",
+            "format": "uuid",
+            "type": "string"
+          },
+          "resourceId": {
+            "description": "ID of the resource to reserve",
+            "example": "b1e4f3a2-0c5d-4e8a-9a51-6f0f2d3c4b5a",
+            "format": "uuid",
+            "type": "string"
+          },
+          "serviceId": {
+            "description": "ID of the service to book",
+            "example": "9d2c1b7e-3a4f-4c6d-8e5b-1a2b3c4d5e6f",
+            "format": "uuid",
+            "type": "string"
+          },
+          "startTime": {
+            "description": "Start of the reservation (ISO 8601, business local time)",
+            "example": "2026-11-03T10:00:00",
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "endTime",
+          "locationId",
+          "resourceId",
+          "serviceId",
+          "startTime"
+        ],
+        "type": "object"
+      },
+      "NearbyBusinessResponse": {
+        "properties": {
+          "category": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BusinessCategoryResponse"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "categoryId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "distanceKm": {
+            "format": "double",
+            "type": "number"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "imageUrl": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "location": {
+            "$ref": "#/components/schemas/BusinessLocationResponse"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "PageResponseBusinessResponse": {
+        "properties": {
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/BusinessResponse"
+            },
+            "type": "array"
+          },
+          "hasNext": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hasPrevious": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "page": {
+            "format": "int32",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "prevCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "size": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "totalElements": {
+            "format": "int64",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "totalPages": {
+            "format": "int32",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "PageResponseNearbyBusinessResponse": {
+        "properties": {
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/NearbyBusinessResponse"
+            },
+            "type": "array"
+          },
+          "hasNext": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hasPrevious": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "page": {
+            "format": "int32",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "prevCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "size": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "totalElements": {
+            "format": "int64",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "totalPages": {
+            "format": "int32",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "PageResponseResource": {
+        "properties": {
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/Resource"
+            },
+            "type": "array"
+          },
+          "hasNext": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hasPrevious": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "page": {
+            "format": "int32",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "prevCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "size": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "totalElements": {
+            "format": "int64",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "totalPages": {
+            "format": "int32",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "PageResponseSearchResultResponse": {
+        "properties": {
+          "content": {
+            "items": {
+              "$ref": "#/components/schemas/SearchResultResponse"
+            },
+            "type": "array"
+          },
+          "hasNext": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "hasPrevious": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          },
+          "nextCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "page": {
+            "format": "int32",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "prevCursor": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "size": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "totalElements": {
+            "format": "int64",
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "totalPages": {
+            "format": "int32",
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "Reservation": {
+        "properties": {
+          "business": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Business"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "clientApplicationId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "endTime": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "externalIdentityId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "guestEmail": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "id": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "locationId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "origin": {
+            "enum": [
+              "RESERVA_APP",
+              "CLIENT_APPLICATION"
+            ],
+            "type": "string"
+          },
+          "resource": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Resource"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resourceId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "service": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/BusinessService"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "serviceId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "startTime": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "PENDING_APPROVAL",
+              "CONFIRMED",
+              "REJECTED",
+              "CANCELLED"
+            ],
+            "type": "string"
+          },
+          "userId": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "ReservationBusinessInfo": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ReservationResourceInfo": {
+        "properties": {
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "EMPLOYEE",
+              "ROOM",
+              "APARTMENT",
+              "TABLE",
+              "COURT",
+              "VEHICLE"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ReservationResponse": {
+        "description": "A reservation of a resource for a service in a time window",
+        "properties": {
+          "business": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ReservationBusinessInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "endTime": {
+            "description": "End of the reservation in the business local time (ISO 8601)",
+            "example": "2026-11-03T10:45:00",
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "description": "Reservation ID",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "format": "uuid",
+            "type": "string"
+          },
+          "resource": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ReservationResourceInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "resourceId": {
+            "description": "ID of the reserved resource",
+            "example": "b1e4f3a2-0c5d-4e8a-9a51-6f0f2d3c4b5a",
+            "format": "uuid",
+            "type": "string"
+          },
+          "service": {
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/ReservationServiceInfo"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "serviceId": {
+            "description": "ID of the reserved service",
+            "example": "9d2c1b7e-3a4f-4c6d-8e5b-1a2b3c4d5e6f",
+            "format": "uuid",
+            "type": "string"
+          },
+          "startTime": {
+            "description": "Start of the reservation in the business local time (ISO 8601)",
+            "example": "2026-11-03T10:00:00",
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "description": "Reservation status, for example PENDING_APPROVAL, CONFIRMED or CANCELLED",
+            "example": "PENDING_APPROVAL",
+            "type": "string"
+          },
+          "userId": {
+            "description": "ID of the user who made the reservation; null for partner reservations",
+            "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "ReservationServiceInfo": {
+        "properties": {
+          "durationStep": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "durationUnit": {
+            "enum": [
+              "MINUTES",
+              "HOURS",
+              "DAYS"
+            ],
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "maxDuration": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "minDuration": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Resource": {
+        "properties": {
+          "businessId": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "enum": [
+              "EMPLOYEE",
+              "ROOM",
+              "APARTMENT",
+              "TABLE",
+              "COURT",
+              "VEHICLE"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ResourceSlotResponse": {
+        "description": "A bookable time slot of a resource",
+        "properties": {
+          "endTime": {
+            "description": "Slot end (ISO 8601, business local time)",
+            "example": "2026-11-03T10:45:00",
+            "format": "date-time",
+            "type": "string"
+          },
+          "startTime": {
+            "description": "Slot start (ISO 8601, business local time)",
+            "example": "2026-11-03T10:00:00",
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "description": "AVAILABLE, PENDING or CONFIRMED",
+            "enum": [
+              "AVAILABLE",
+              "PENDING",
+              "CONFIRMED"
+            ],
+            "example": "AVAILABLE",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "SearchResultResponse": {
+        "description": "A business matching a search query",
+        "properties": {
+          "businessId": {
+            "description": "Business ID",
+            "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "format": "uuid",
+            "type": "string"
+          },
+          "businessName": {
+            "description": "Business name",
+            "example": "Salon One",
+            "type": "string"
+          },
+          "categoryId": {
+            "description": "Category ID of the business",
+            "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+            "format": "uuid",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "city": {
+            "description": "City of the business",
+            "example": "Beograd",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "imageUrl": {
+            "description": "URL of the business image, if any",
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "similarityScore": {
+            "description": "Similarity of the business to the query, higher is better",
+            "example": 0.82,
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "SearchSuggestionResponse": {
+        "description": "Single autocomplete suggestion",
+        "properties": {
+          "id": {
+            "description": "PLACE: city name; CATEGORY and BUSINESS: UUID",
+            "example": "Beograd",
+            "type": "string"
+          },
+          "name": {
+            "description": "Display name, localized for categories",
+            "example": "Beograd",
+            "type": "string"
+          },
+          "type": {
+            "description": "Suggestion kind: PLACE, CATEGORY or BUSINESS",
+            "example": "PLACE",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "StoredFile": {
+        "properties": {
+          "contentType": {
+            "type": "string"
+          },
+          "sizeInBytes": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "storageKey": {
+            "type": "string"
+          },
+          "uploadedAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "oauth2": {
+        "description": "OAuth2 bearer tokens issued by the Reserva authorization server. Signed-in Reserva users use the authorization code flow. Server-side integrations use the client credentials flow. Partner applications acting for their own end users obtain a token through OAuth2 token exchange (RFC 8693) on the same token endpoint.",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://reserva.bojanlab.com/auth/oauth2/authorize",
+            "scopes": {
+              "openid": "OpenID Connect",
+              "profile": "Profile",
+              "read": "Read access",
+              "reservation:create": "Create reservations on behalf of a partner's end user",
+              "reservation:read:own": "Read the reservations a partner made for the calling end user",
+              "write": "Write access"
+            },
+            "tokenUrl": "https://reserva.bojanlab.com/auth/oauth2/token"
+          },
+          "clientCredentials": {
+            "scopes": {
+              "openid": "OpenID Connect",
+              "profile": "Profile",
+              "read": "Read access",
+              "reservation:create": "Create reservations on behalf of a partner's end user",
+              "reservation:read:own": "Read the reservations a partner made for the calling end user",
+              "write": "Write access"
+            },
+            "tokenUrl": "https://reserva.bojanlab.com/auth/oauth2/token"
+          }
+        },
+        "type": "oauth2"
+      }
+    }
+  },
+  "info": {
+    "contact": {
+      "name": "Reserva API support",
+      "url": "https://reserva.rs"
+    },
+    "description": "Public REST API of Reserva for partners and integrations: search businesses, read their locations, services and resources, check availability and manage reservations. Tokens are issued by the Reserva authorization server (see the Reserva Auth API).",
+    "license": {
+      "name": "Apache-2.0",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "title": "Reserva Resource API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/business-categories": {
+      "get": {
+        "description": "Returns every business category with its name localized using the Accept-Language header.",
+        "operationId": "listBusinessCategories",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "required": false,
+            "schema": {
+              "default": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BusinessCategoryResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [],
+        "summary": "List all business categories with names resolved for the given locale",
+        "tags": [
+          "Business Categories"
+        ]
+      }
+    },
+    "/business-categories/{id}": {
+      "get": {
+        "description": "Returns one business category with its name localized using the Accept-Language header.",
+        "operationId": "getBusinessCategory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "required": false,
+            "schema": {
+              "default": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusinessCategoryResponse"
+                }
+              }
+            },
+            "description": "Business category not found"
+          }
+        },
+        "security": [],
+        "summary": "Get a business category by its public ID with name resolved for the given locale",
+        "tags": [
+          "Business Categories"
+        ]
+      }
+    },
+    "/businesses/category/{categoryId}": {
+      "get": {
+        "description": "Returns a page of active businesses in one category. Category names are localized using the Accept-Language header.",
+        "operationId": "listBusinessesByCategory",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "categoryId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "required": false,
+            "schema": {
+              "default": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseBusinessResponse"
+                }
+              }
+            },
+            "description": "Page of businesses for the given category returned"
+          }
+        },
+        "security": [],
+        "summary": "Search active businesses belonging to the given category, paginated",
+        "tags": [
+          "Businesses"
+        ]
+      }
+    },
+    "/businesses/nearby": {
+      "get": {
+        "description": "Returns active businesses ordered by distance from the given latitude and longitude.",
+        "operationId": "searchNearbyBusinesses",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "latitude",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "longitude",
+            "required": true,
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "categoryId",
+            "required": false,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "required": false,
+            "schema": {
+              "default": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseNearbyBusinessResponse"
+                }
+              }
+            },
+            "description": "Page of nearby businesses returned, nearest first"
+          }
+        },
+        "security": [],
+        "summary": "Search active businesses nearest to the given coordinates, optionally filtered by category; results are ordered nearest-first",
+        "tags": [
+          "Businesses"
+        ]
+      }
+    },
+    "/businesses/search": {
+      "get": {
+        "description": "Returns a page of active businesses, optionally filtered by name text and category IDs.",
+        "operationId": "searchBusinessesByFilter",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "categoryIds",
+            "required": false,
+            "schema": {
+              "items": {
+                "format": "uuid",
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "required": false,
+            "schema": {
+              "default": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseBusinessResponse"
+                }
+              }
+            },
+            "description": "Page of businesses returned"
+          }
+        },
+        "security": [],
+        "summary": "Search active businesses with optional filters (name, categories); returns all when no filter is provided",
+        "tags": [
+          "Businesses"
+        ]
+      }
+    },
+    "/businesses/{businessId}/locations": {
+      "get": {
+        "description": "Returns the physical locations (branches) of a business.",
+        "operationId": "listBusinessLocations",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "businessId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BusinessLocationResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Locations returned"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BusinessLocationResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Business not found"
+          }
+        },
+        "security": [],
+        "summary": "List all locations for a business",
+        "tags": [
+          "Business Locations"
+        ]
+      }
+    },
+    "/businesses/{businessId}/resources": {
+      "get": {
+        "description": "Returns a page of the bookable resources (for example staff members or rooms) of a business.",
+        "operationId": "listBusinessResources",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "businessId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseResource"
+                }
+              }
+            },
+            "description": "Page of resources returned"
+          }
+        },
+        "security": [],
+        "summary": "List all resources for a business (paginated)",
+        "tags": [
+          "Resources"
+        ]
+      }
+    },
+    "/businesses/{businessId}/services": {
+      "get": {
+        "description": "Returns the bookable services of a business, including their duration rules.",
+        "operationId": "listBusinessServices",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "businessId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/BusinessServiceResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Business not found"
+          }
+        },
+        "security": [],
+        "summary": "List all services offered by a business",
+        "tags": [
+          "Business Services"
+        ]
+      }
+    },
+    "/businesses/{id}": {
+      "get": {
+        "description": "Returns one business with its category name localized using the Accept-Language header.",
+        "operationId": "getBusiness",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "required": false,
+            "schema": {
+              "default": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusinessResponse"
+                }
+              }
+            },
+            "description": "Business found"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusinessResponse"
+                }
+              }
+            },
+            "description": "Business not found"
+          }
+        },
+        "security": [],
+        "summary": "Get a business by its public ID",
+        "tags": [
+          "Businesses"
+        ]
+      }
+    },
+    "/client-applications/reservations": {
+      "get": {
+        "description": "Returns the reservations made by the calling client application for the token's user.",
+        "operationId": "listPartnerReservations",
+        "responses": {
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReservationResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Token lacks the reservation:read:own scope"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "reservation:read:own"
+            ]
+          }
+        ],
+        "summary": "List the reservations the client application made for the calling user (scope reservation:read:own)",
+        "tags": [
+          "Client Applications"
+        ]
+      },
+      "post": {
+        "description": "Creates a reservation for the end user represented by a partner token obtained through token exchange.",
+        "operationId": "createPartnerReservation",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReservationByClientApplicationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Token lacks the reservation:create scope"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Client application, resource, location, or service not found"
+          },
+          "409": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Slot is taken by an overlapping reservation (error code RESERVATION_SLOT_TAKEN)"
+          },
+          "422": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Client application is disabled, target location is outside its scope, the location's owner has not approved the client application (error code CLIENT_APPLICATION_LOCATION_CONSENT_NOT_APPROVED), or the duration is invalid"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "reservation:create"
+            ]
+          }
+        ],
+        "summary": "Book a reservation on behalf of a client application's own user (scope reservation:create)",
+        "tags": [
+          "Client Applications"
+        ]
+      }
+    },
+    "/client-applications/reservations/{id}": {
+      "get": {
+        "description": "Returns one reservation made by the calling client application for the token's user.",
+        "operationId": "getPartnerReservation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Token lacks the reservation:read:own scope"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Reservation not found or not owned by the caller"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "reservation:read:own"
+            ]
+          }
+        ],
+        "summary": "Get one reservation the client application made for the calling user (scope reservation:read:own)",
+        "tags": [
+          "Client Applications"
+        ]
+      }
+    },
+    "/client-applications/{id}/widget-config": {
+      "get": {
+        "description": "Returns whether the client application is enabled and the locations it can book.",
+        "operationId": "getWidgetConfig",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientApplicationWidgetConfigResponse"
+                }
+              }
+            },
+            "description": "Client application not found"
+          }
+        },
+        "security": [],
+        "summary": "Get the public widget configuration of a client application: enabled flag and bookable locations",
+        "tags": [
+          "Client Applications"
+        ]
+      }
+    },
+    "/reservations": {
+      "get": {
+        "description": "Returns the reservations of the signed-in user.",
+        "operationId": "listReservations",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReservationResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Reservations returned"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReservationResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Authentication required"
+          }
+        },
+        "summary": "Get reservations visible to the signed-in Reserva user, based on their roles",
+        "tags": [
+          "Reservations"
+        ]
+      }
+    },
+    "/resources/{resourceId}/reservations": {
+      "post": {
+        "description": "Creates a reservation for the signed-in user on the given resource.",
+        "operationId": "createReservation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "resourceId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Reservation"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Reservation created"
+          },
+          "400": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Resource not found or slot outside availability"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Authentication required"
+          },
+          "409": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Slot is taken by an overlapping reservation (error code RESERVATION_SLOT_TAKEN)"
+          }
+        },
+        "summary": "Book a reservation for a resource",
+        "tags": [
+          "Reservations"
+        ]
+      }
+    },
+    "/resources/{resourceId}/reservations/{id}": {
+      "get": {
+        "description": "Returns one reservation by its ID.",
+        "operationId": "getReservation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Reservation found"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Authentication required"
+          }
+        },
+        "summary": "Get a reservation by its ID",
+        "tags": [
+          "Reservations"
+        ]
+      }
+    },
+    "/resources/{resourceId}/reservations/{id}/cancel": {
+      "post": {
+        "description": "Cancels a reservation made by the signed-in user, if the business cancellation policy allows it.",
+        "operationId": "cancelReservation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "resourceId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Reservation not found"
+          },
+          "409": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Caller did not make this reservation"
+          },
+          "422": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Reservation status is not cancellable under the business's cancellation policy"
+          }
+        },
+        "summary": "Cancel a reservation as the user who made it",
+        "tags": [
+          "Reservations"
+        ]
+      }
+    },
+    "/resources/{resourceId}/slots": {
+      "get": {
+        "description": "Returns the slots of a resource for a service in the given date range. Dates use the ISO format yyyy-MM-dd.",
+        "operationId": "listResourceSlots",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "resourceId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "serviceId",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "duration",
+            "required": false,
+            "schema": {
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": true,
+            "schema": {
+              "format": "date",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceSlotResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Slot list returned"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceSlotResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Service not found"
+          },
+          "422": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ResourceSlotResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Duration outside the service's allowed range or step"
+          }
+        },
+        "security": [],
+        "summary": "Get discrete fixed-length slots for a minute/hour-based service, each tagged AVAILABLE, PENDING, or CONFIRMED",
+        "tags": [
+          "Resources"
+        ]
+      }
+    },
+    "/v1/search": {
+      "get": {
+        "description": "Returns a page of active businesses ranked by similarity to the query. Pagination is zero-based.",
+        "operationId": "searchBusinesses",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "city",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "format": "int32",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "size",
+            "required": false,
+            "schema": {
+              "default": 20,
+              "format": "int32",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageResponseSearchResultResponse"
+                }
+              }
+            },
+            "description": "Paginated businesses ordered by similarity descending"
+          }
+        },
+        "security": [],
+        "summary": "Discover businesses by free-text query (q) across name, category, and service, optionally scoped to a city",
+        "tags": [
+          "Search"
+        ]
+      }
+    },
+    "/v1/search/suggestions": {
+      "get": {
+        "description": "Returns a short ordered list of suggestions to power a search-as-you-type input.",
+        "operationId": "getSearchSuggestions",
+        "parameters": [
+          {
+            "description": "Text typed by the user",
+            "in": "query",
+            "name": "q",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Locale (BCP 47) for category names; defaults to Accept-Language header, then en",
+            "in": "query",
+            "name": "lang",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "Accept-Language",
+            "required": false,
+            "schema": {
+              "default": "en",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/SearchSuggestionResponse"
+                  },
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Ordered suggestions: PLACE first, then CATEGORY, then BUSINESS. PLACE id is the city name; CATEGORY and BUSINESS id is a UUID"
+          }
+        },
+        "security": [],
+        "summary": "Autocomplete suggestions (places, categories, businesses) for a typed query; blank q returns an empty list",
+        "tags": [
+          "Search"
+        ]
+      }
+    }
+  },
+  "security": [
+    {
+      "oauth2": [
+        "openid",
+        "profile"
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "description": "Business category management",
+      "name": "Business Categories"
+    },
+    {
+      "description": "Physical branch management for businesses",
+      "name": "Business Locations"
+    },
+    {
+      "description": "Service catalogue management for businesses",
+      "name": "Business Services"
+    },
+    {
+      "description": "Resource management within a business",
+      "name": "Resources"
+    },
+    {
+      "description": "Business management",
+      "name": "Businesses"
+    },
+    {
+      "description": "Registration of external client applications and widget reservations made through them",
+      "name": "Client Applications"
+    },
+    {
+      "description": "Reservation booking and retrieval",
+      "name": "Reservations"
+    },
+    {
+      "description": "Search businesses and get autocomplete suggestions. No authentication required.",
+      "name": "Search"
+    }
+  ]
+}

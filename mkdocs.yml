@@ -1,0 +1,71 @@
+site_name: Reserva API
+site_description: Public API, partner integration and booking widget documentation for Reserva.
+site_url: https://reserva-docs.bojanlab.com/
+repo_url: https://github.com/bojanb89pa/reservation-docs
+repo_name: reservation-docs
+edit_uri: edit/main/docs/
+copyright: Reserva API is in preview. It may change without notice until general availability.
+
+theme:
+  name: material
+  custom_dir: overrides
+  features:
+    - content.code.copy
+    - navigation.sections
+    - navigation.footer
+    - search.suggest
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+
+# Environment URLs are listed once, in the table at the top of
+# docs/getting-started.md. Examples spell out the staging URL so that they
+# can be copied as they are. When production arrives, add it to that table
+# and update the examples in one pass.
+extra:
+  status: preview
+
+nav:
+  - Introduction: index.md
+  - Getting started: getting-started.md
+  - Authentication: authentication.md
+  - Guides:
+      - Partner integration: guides/partner-integration.md
+      - Booking widget: guides/widget.md
+  - API reference: reference/index.md
+  - Changelog: changelog.md
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
+validation:
+  nav:
+    omitted_files: warn
+    not_found: warn
+  links:
+    not_found: warn
+    anchors: warn
+    absolute_links: info
+    unrecognized_links: warn
