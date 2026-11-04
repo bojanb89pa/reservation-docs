@@ -1,0 +1,78 @@
+name: Sync OpenAPI
+
+# Copies the public OpenAPI documents from staging into docs/openapi/.
+# Nothing else may change those files.
+
+on:
+  # Sent by deploy-staging.yml in reservation-be after a successful deploy.
+  # client_payload: { "sha": "<backend commit>" }
+  repository_dispatch:
+    types: [be-deployed]
+  # Fallback if a dispatch is missed.
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-openapi
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.commit.outputs.changed }}
+    env:
+      API_BASE: https://reserva.bojanlab.com
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download and normalize the public documents
+        run: |
+          set -euo pipefail
+          fetch() {
+            curl --fail --silent --show-error --retry 3 --retry-delay 10 "$1" -o "$2.raw"
+            # Sorted keys for stable diffs; servers depend on the environment.
+            jq -S 'del(.servers)' "$2.raw" > "$2"
+            rm "$2.raw"
+          }
+          fetch "$API_BASE/api/v3/api-docs/public" docs/openapi/resource.json
+          fetch "$API_BASE/auth/v3/api-docs/public" docs/openapi/auth.json
+
+      - name: Commit when something changed
+        id: commit
+        env:
+          BE_SHA: ${{ github.event.client_payload.sha }}
+          TRIGGER: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- docs/openapi; then
+            echo "No change in the OpenAPI documents."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898099+github-actions[bot]@users.noreply.github.com"
+          git add docs/openapi
+          if [ -n "${BE_SHA:-}" ]; then
+            msg="Sync OpenAPI from staging (reservation-be ${BE_SHA:0:7})"
+          else
+            msg="Sync OpenAPI from staging (${TRIGGER})"
+          fi
+          git commit -m "$msg"
+          git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+  pages:
+    needs: sync
+    if: needs.sync.outputs.changed == 'true'
+    uses: ./.github/workflows/pages.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
