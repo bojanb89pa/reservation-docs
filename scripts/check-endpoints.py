@@ -9,16 +9,21 @@ to match; only their positions do.
 A guide that describes an endpoint which is not deployed yet fails this check. That is intended: the
 docs pull request stays red until the backend change reaches staging and the sync workflow refreshes
 the documents.
+
+OPENAPI_DIR overrides the directory with resource.json and auth.json. The PR check points it at the
+documents on the tip of main, so a re-run after a sync sees the new endpoints.
 """
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
-SPECS = {"/api": DOCS / "openapi" / "resource.json", "/auth": DOCS / "openapi" / "auth.json"}
+SPEC_DIR = Path(os.environ.get("OPENAPI_DIR") or DOCS / "openapi")
+SPECS = {"/api": SPEC_DIR / "resource.json", "/auth": SPEC_DIR / "auth.json"}
 METHODS = ("GET", "POST", "PUT", "PATCH", "DELETE")
 MENTION = re.compile(r"`(" + "|".join(METHODS) + r") (/[^`\s?#]*)`")
 PARAM = re.compile(r"\{[^}/]+\}")
@@ -56,7 +61,7 @@ def main() -> int:
                     continue
                 path = normalize(full_path[len(prefix):] or "/")
                 if (method, path) not in operations[prefix]:
-                    errors.append(f"{where}: `{method} {full_path}` is not in {SPECS[prefix].relative_to(ROOT)}")
+                    errors.append(f"{where}: `{method} {full_path}` is not in {SPECS[prefix].name}")
     for error in errors:
         print(error, file=sys.stderr)
     print(f"check-endpoints: {checked} endpoint mentions, {len(errors)} not found")

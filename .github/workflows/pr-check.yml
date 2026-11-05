@@ -23,8 +23,22 @@ jobs:
       - name: Build the site (strict)
         run: mkdocs build --strict
 
+      # Only for pull requests into main. A pull request into an epic branch
+      # describes endpoints that reach staging only after the backend epic is
+      # merged and deployed, so it would always fail here.
+      # The documents come from the tip of main, not from the merge commit: a
+      # re-run after the sync workflow refreshed them then sees the new endpoints
+      # (a re-run keeps the original merge commit).
       - name: Endpoints named in the guides exist in the OpenAPI documents
-        run: python scripts/check-endpoints.py
+        if: github.event_name != 'pull_request' || github.base_ref == 'main'
+        run: |
+          set -euo pipefail
+          git fetch --quiet --depth=1 origin main
+          mkdir -p "$RUNNER_TEMP/openapi"
+          for f in resource.json auth.json; do
+            git show "origin/main:docs/openapi/$f" > "$RUNNER_TEMP/openapi/$f"
+          done
+          OPENAPI_DIR="$RUNNER_TEMP/openapi" python scripts/check-endpoints.py
 
       - name: English only (no Serbian letters outside the generated OpenAPI documents)
         run: |

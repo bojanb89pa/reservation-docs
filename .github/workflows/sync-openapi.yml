@@ -15,6 +15,9 @@ on:
 
 permissions:
   contents: write
+  # Re-runs failed PR checks after a sync (see the last step of `sync`).
+  actions: write
+  pull-requests: read
 
 concurrency:
   group: sync-openapi
@@ -67,6 +70,24 @@ jobs:
           git commit -m "$msg"
           git push origin HEAD:main
           echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # A docs pull request into main that names a new endpoint fails the
+      # endpoint check until the backend is deployed. Now that the documents
+      # changed, run the failed checks of open pull requests into main again.
+      - name: Re-run failed PR checks
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          for sha in $(gh pr list --repo "$REPO" --base main --state open --json headRefOid -q '.[].headRefOid'); do
+            for run in $(gh run list --repo "$REPO" --workflow pr-check.yml --commit "$sha" \
+                           --json databaseId,conclusion -q '.[] | select(.conclusion == "failure") | .databaseId'); do
+              echo "Re-running PR check run $run ($sha)"
+              gh run rerun "$run" --repo "$REPO" --failed || echo "::warning::could not re-run $run"
+            done
+          done
 
   pages:
     needs: sync
