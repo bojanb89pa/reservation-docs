@@ -3,6 +3,18 @@
 Entries are newest first. A breaking change is marked **Breaking** at the top of its entry. During the
 preview there is no deprecation period.
 
+## 0.2.0 — 2026-11-06
+
+Documentation of four read-only endpoints that were already available on staging. There are no breaking
+changes.
+
+- Search suggestions: `GET /api/v1/search/suggestions` returns autocomplete suggestions (places,
+  categories, businesses) for a typed query.
+- Lookup by ID: `GET /api/businesses/{id}` and `GET /api/business-categories/{id}` return one business or
+  category, with the category name localized by `Accept-Language`.
+- Reservations: `GET /api/resources/{resourceId}/reservations/{id}` returns one reservation and needs an
+  access token.
+
 ## 0.1.0 — 2026-11-04
 
 First public preview.
