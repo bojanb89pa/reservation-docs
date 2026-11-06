@@ -49,9 +49,40 @@ curl "https://reserva.bojanlab.com/api/v1/search?q=frizer&size=5"
 }
 ```
 
+For a search-as-you-type input, `GET /api/v1/search/suggestions` returns a short ordered list of
+suggestions for the text typed so far. Pass `q` (required) and optionally `lang` (BCP 47) for category
+names; without it the `Accept-Language` header is used, then `en`. A blank `q` returns an empty list.
+
+```bash
+curl "https://reserva.bojanlab.com/api/v1/search/suggestions?q=fri"
+```
+
+```json
+[
+  { "id": "Novi Sad", "name": "Novi Sad", "type": "PLACE" },
+  { "id": "a0000000-0000-0000-0000-000000000001", "name": "Hairdresser", "type": "CATEGORY" },
+  { "id": "2b187165-3c35-4d6f-9edf-a9ec7dc73afe", "name": "Novosadski Frizer", "type": "BUSINESS" }
+]
+```
+
+Suggestions are ordered `PLACE`, then `CATEGORY`, then `BUSINESS`. The `id` of a `PLACE` is the city
+name; for the other two it is a UUID you can pass to the lookup endpoints below.
+
 Pagination is zero-based (`page`, `size`). Other ways to find businesses are
 `GET /api/businesses/search` (filters), `GET /api/businesses/nearby` (coordinates) and
 `GET /api/businesses/category/{categoryId}`. Categories come from `GET /api/business-categories`.
+
+To read a single business or category by its ID (for example one returned by search or suggestions), use
+`GET /api/businesses/{id}` and `GET /api/business-categories/{id}`. Both need no token and localize the
+category name with the `Accept-Language` header (default `en`). An unknown ID returns `404`.
+
+```bash
+curl -H "Accept-Language: en" "https://reserva.bojanlab.com/api/businesses/2b187165-3c35-4d6f-9edf-a9ec7dc73afe"
+curl -H "Accept-Language: en" "https://reserva.bojanlab.com/api/business-categories/a0000000-0000-0000-0000-000000000001"
+```
+
+The business response includes `id`, `name`, `categoryId`, the localized `category`, `imageUrl` and
+`status`. The category response includes `id`, `name`, `parentId`, `color` and `symbol`.
 
 ### 2. Read locations, services and resources
 
@@ -94,6 +125,15 @@ Creating, reading and cancelling reservations is done for a user, so these calls
 | --- | --- | --- |
 | A signed-in Reserva user | `POST /api/resources/{resourceId}/reservations`, `GET /api/reservations`, `POST /api/resources/{resourceId}/reservations/{id}/cancel` | Authorization code flow |
 | A partner application, for its own user | `POST /api/client-applications/reservations`, `GET /api/client-applications/reservations` | Token exchange |
+
+To read one reservation, call `GET /api/resources/{resourceId}/reservations/{id}` with an access token. It
+returns the reservation with its `startTime`, `endTime`, `resourceId` and `serviceId`; without a valid token
+it answers `401`.
+
+```bash
+curl -H "Authorization: Bearer $ACCESS_TOKEN" \
+  "https://reserva.bojanlab.com/api/resources/<resourceId>/reservations/<reservationId>"
+```
 
 Read [Authentication](authentication.md) next. If you are building a website for a business, the
 [booking widget](guides/widget.md) does all of this for you.
