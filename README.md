@@ -17,12 +17,20 @@ Endpoint descriptions, parameters and examples come from the backend code. Fix t
 
 ## Workflows
 
-- **PR check** (`pr-check.yml`): `mkdocs build --strict`, `scripts/check-endpoints.py` (every
-  `` `METHOD /api/...` `` or `` `METHOD /auth/...` `` named in the docs must exist in the OpenAPI documents),
-  and a check for Serbian letters.
+- **PR check** (`pr-check.yml`): `mkdocs build --strict`, a check for Serbian letters and, for pull
+  requests into `main`, `scripts/check-endpoints.py` (every `` `METHOD /api/...` `` or
+  `` `METHOD /auth/...` `` named in the docs must exist in the OpenAPI documents on `main`).
 - **Pages** (`pages.yml`): builds and deploys the site on every push to `main`.
 - **Sync OpenAPI** (`sync-openapi.yml`): downloads the public documents from staging after each backend
   deploy (`repository_dispatch` `be-deployed`), every 6 hours, or on demand, and commits them when they change.
+  After a change it re-runs failed PR checks of open pull requests into `main`.
+
+## Docs agent
+
+Tickets labelled `layer:guides` are opened by the backend agent when an epic changes the public API. The
+docs agent updates the guides and the changelog on the epic branch (`<type>/<number>-<slug>`); a summary
+pull request into `main` follows when every ticket of the epic is closed. It stays red until the backend
+change is deployed to staging, then the sync workflow re-runs its checks.
 
 ## Local preview
 
