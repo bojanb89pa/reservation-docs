@@ -1136,6 +1136,7 @@
               "openid": "OpenID Connect",
               "profile": "Profile",
               "read": "Read access",
+              "reservation:cancel:own": "Cancel the reservations a partner made for the calling end user",
               "reservation:create": "Create reservations on behalf of a partner's end user",
               "reservation:read:own": "Read the reservations a partner made for the calling end user",
               "write": "Write access"
@@ -1147,6 +1148,7 @@
               "openid": "OpenID Connect",
               "profile": "Profile",
               "read": "Read access",
+              "reservation:cancel:own": "Cancel the reservations a partner made for the calling end user",
               "reservation:create": "Create reservations on behalf of a partner's end user",
               "reservation:read:own": "Read the reservations a partner made for the calling end user",
               "write": "Write access"
@@ -1807,6 +1809,86 @@
           }
         ],
         "summary": "Get one reservation the client application made for the calling user (scope reservation:read:own)",
+        "tags": [
+          "Client Applications"
+        ]
+      }
+    },
+    "/client-applications/reservations/{id}/cancel": {
+      "post": {
+        "description": "Cancels one reservation made by the calling client application for the token's user and returns the updated reservation. Whether cancellation is allowed from the reservation's current status is decided by the cancellation policy of the business that owns the reservation.",
+        "operationId": "cancelPartnerReservation",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Reservation cancelled; the updated reservation is returned"
+          },
+          "401": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Token lacks the reservation:cancel:own scope"
+          },
+          "404": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "Reservation not found or not owned by the caller"
+          },
+          "422": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReservationResponse"
+                }
+              }
+            },
+            "description": "The business's cancellation policy does not allow cancelling from the reservation's current status (error code RESERVATION_CANCELLATION_NOT_ALLOWED)"
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "reservation:cancel:own"
+            ]
+          }
+        ],
+        "summary": "Cancel a reservation the client application made for the calling user (scope reservation:cancel:own)",
         "tags": [
           "Client Applications"
         ]
