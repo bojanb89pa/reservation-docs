@@ -251,13 +251,46 @@ A partner can also book from its own code. Exchange the identity token as descri
 | `POST /api/client-applications/reservations` | `reservation:create` | Book for the token's user. The body has `locationId`, `serviceId`, `resourceId`, `startTime` and `endTime`. |
 | `GET /api/client-applications/reservations` | `reservation:read:own` | List the reservations your application made for that user. |
 | `GET /api/client-applications/reservations/{id}` | `reservation:read:own` | Read one of them. |
+| `POST /api/client-applications/reservations/{id}/cancel` | `reservation:cancel:own` | Cancel one of them. |
 
 Find free times first with the public endpoints from [Getting started](../getting-started.md): locations,
 services, resources and `GET /api/resources/{resourceId}/slots`. Times are local times of the business
 location. The same rules as for the widget apply: business consent for the location, and an enabled partner.
 
-!!! note "Cancelling"
-    Cancelling a partner reservation is not available in the public API yet.
+### Cancelling a reservation
+
+`POST /api/client-applications/reservations/{id}/cancel` cancels a reservation that your application made for
+the token's user. There is no request body, and `{id}` is the reservation ID. The token needs the scope
+`reservation:cancel:own`. It is granted only when it is in the allowed scopes of your application, so ask
+Reserva to enable it for existing applications, and request it in the token exchange:
+
+```bash
+curl -X POST "https://reserva.bojanlab.com/auth/oauth2/token" \
+  --data-urlencode "grant_type=urn:ietf:params:oauth:grant-type:token-exchange" \
+  --data-urlencode "client_id=<public client application id>" \
+  --data-urlencode "subject_token=<your signed assertion>" \
+  --data-urlencode "subject_token_type=urn:ietf:params:oauth:token-type:jwt" \
+  --data-urlencode "scope=reservation:create reservation:read:own reservation:cancel:own"
+```
+
+Then cancel the reservation:
+
+```bash
+curl -X POST "https://reserva.bojanlab.com/api/client-applications/reservations/<reservation id>/cancel" \
+  -H "Authorization: Bearer <access token>"
+```
+
+The response is `200` with the updated reservation, in the same shape as
+`GET /api/client-applications/reservations/{id}`. Check that `status` is now `CANCELLED`.
+
+| Status | Meaning |
+| --- | --- |
+| `401` | The token is missing or invalid. |
+| `403` | The token does not have the scope `reservation:cancel:own`. |
+| `404` | The reservation does not exist, or it was not made by your application for this user. Both cases look the same. |
+| `422` | The cancellation policy of the business does not allow cancelling from the current status (`RESERVATION_CANCELLATION_NOT_ALLOWED`). |
+
+The booking widget has no cancel button yet.
 
 ## 6. Terms of use
 
