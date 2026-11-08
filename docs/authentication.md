@@ -89,6 +89,7 @@ identity token again.
 | --- | --- |
 | `reservation:create` | Creating a reservation for the token's end user: `POST /api/client-applications/reservations`. |
 | `reservation:read:own` | Reading the reservations your application made for that user: `GET /api/client-applications/reservations` and `GET /api/client-applications/reservations/{id}`. |
+| `reservation:cancel:own` | Cancelling a reservation your application made for that user: `POST /api/client-applications/reservations/{id}/cancel`. The scope is granted only when it is in the application's allowed scopes; existing applications do not get it automatically. |
 | `openid`, `profile` | OpenID Connect scopes for Reserva's own sign-in. |
 | `read`, `write` | General scopes of Reserva's own applications. |
 
