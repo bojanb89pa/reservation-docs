@@ -3,6 +3,28 @@
 Entries are newest first. A breaking change is marked **Breaking** at the top of its entry. During the
 preview there is no deprecation period.
 
+## 0.4.0 — 2026-11-20
+
+Reserva can be connected to AI assistants through an MCP server, and reservation responses show where a
+reservation came from. There are no breaking changes.
+
+- New: `POST /api/mcp` is the MCP server endpoint (stateless Streamable HTTP). It needs a token issued for
+  the MCP resource; without a valid token it returns `401` with a `WWW-Authenticate` header that points to
+  the resource metadata. Tools: search, business details, free slots, create, list, get and cancel
+  reservation. See [Connect Reserva to AI assistants](guides/mcp.md).
+- New: `GET /api/.well-known/oauth-protected-resource` and
+  `GET /api/.well-known/oauth-protected-resource/mcp` return the OAuth Protected Resource Metadata
+  (RFC 9728) of the MCP server: resource, authorization servers and the scopes `reservations:read` and
+  `reservations:write`.
+- Changed: reservation responses have two new fields, `origin` (`RESERVA_APP`, `CLIENT_APPLICATION` or
+  `AI_ASSISTANT`) and `originClient` (client name, for `AI_ASSISTANT` only, otherwise `null`). They appear in
+  `GET /api/reservations`, `POST /api/resources/{resourceId}/reservations`,
+  `GET /api/resources/{resourceId}/reservations/{id}` and
+  `POST /api/resources/{resourceId}/reservations/{id}/cancel`. Requests are unchanged. Treat an unknown
+  `origin` value as `RESERVA_APP`.
+- Tokens for the MCP server are not accepted by the REST endpoints, and REST or partner tokens are not
+  accepted by `POST /api/mcp`.
+
 ## 0.3.0 — 2026-11-08
 
 Partners can cancel the reservations they made. There are no breaking changes.
