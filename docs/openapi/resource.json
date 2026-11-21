@@ -725,6 +725,45 @@
         },
         "type": "object"
       },
+      "ProtectedResourceMetadataResponse": {
+        "description": "OAuth 2.0 Protected Resource Metadata (RFC 9728) of the MCP server",
+        "properties": {
+          "authorization_servers": {
+            "description": "Issuers of the authorization servers that can issue tokens for this resource",
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "bearer_methods_supported": {
+            "description": "How a bearer token may be presented",
+            "example": [
+              "header"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "resource": {
+            "description": "Canonical URI of the MCP server; the `resource` and token audience",
+            "example": "https://reserva.bojanlab.com/api/mcp",
+            "type": "string"
+          },
+          "scopes_supported": {
+            "description": "OAuth scopes the MCP server understands",
+            "example": [
+              "reservations:read",
+              "reservations:write"
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
       "Reservation": {
         "properties": {
           "business": {
@@ -1201,6 +1240,52 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/.well-known/oauth-protected-resource": {
+      "get": {
+        "description": "Returns the OAuth 2.0 Protected Resource Metadata (RFC 9728) of the Reserva MCP server: the resource identifier, the authorization servers that issue its tokens and the supported scopes. MCP clients read it to discover where to authorize. Advertised in the WWW-Authenticate challenge.",
+        "operationId": "getProtectedResourceMetadata",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProtectedResourceMetadataResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [],
+        "summary": "Get the OAuth protected resource metadata of the MCP server",
+        "tags": [
+          "MCP"
+        ]
+      }
+    },
+    "/.well-known/oauth-protected-resource/mcp": {
+      "get": {
+        "description": "Same document as the path-less well-known URL, served at the URL derived from the `/mcp` resource path as defined by RFC 9728.",
+        "operationId": "getMcpProtectedResourceMetadata",
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProtectedResourceMetadataResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "security": [],
+        "summary": "Get the OAuth protected resource metadata of the MCP endpoint",
+        "tags": [
+          "MCP"
+        ]
+      }
+    },
     "/business-categories": {
       "get": {
         "description": "Returns every business category with its name localized using the Accept-Language header.",
@@ -1954,6 +2039,100 @@
         ]
       }
     },
+    "/mcp": {
+      "post": {
+        "description": "MCP Streamable HTTP endpoint (JSON-RPC 2.0), stateless, for AI clients such as Claude. Send tools/list to get the available tools and tools/call to invoke one. Requires an MCP access token; see the protected resource metadata for the authorization server.",
+        "operationId": "callMcp",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "example": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/list\"}",
+              "schema": {
+                "properties": {
+                  "id": {
+                    "description": "Request ID; omitted for notifications",
+                    "example": 1
+                  },
+                  "jsonrpc": {
+                    "description": "Always 2.0",
+                    "example": "2.0",
+                    "type": "string"
+                  },
+                  "method": {
+                    "description": "MCP method, e.g. initialize, tools/list or tools/call",
+                    "example": "tools/list",
+                    "type": "string"
+                  },
+                  "params": {
+                    "description": "Method parameters",
+                    "type": "object"
+                  }
+                },
+                "required": [
+                  "jsonrpc",
+                  "method"
+                ],
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "error": {
+                      "description": "JSON-RPC error object of a failed call",
+                      "type": "object"
+                    },
+                    "id": {
+                      "description": "ID of the request being answered",
+                      "example": 1
+                    },
+                    "jsonrpc": {
+                      "example": "2.0",
+                      "type": "string"
+                    },
+                    "result": {
+                      "description": "Result of a successful call",
+                      "type": "object"
+                    }
+                  },
+                  "type": "object"
+                }
+              }
+            },
+            "description": "JSON-RPC response"
+          },
+          "401": {
+            "description": "Missing or invalid token; the challenge points to the protected resource metadata",
+            "headers": {
+              "WWW-Authenticate": {
+                "description": "Bearer challenge with resource_metadata (URL of the protected resource metadata) and scope",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "oauth2": [
+              "reservations:read",
+              "reservations:write"
+            ]
+          }
+        ],
+        "summary": "Call the MCP server",
+        "tags": [
+          "MCP"
+        ]
+      }
+    },
     "/reservations": {
       "get": {
         "description": "Returns the reservations of the signed-in user.",
@@ -2402,6 +2581,10 @@
     {
       "description": "Physical branch management for businesses",
       "name": "Business Locations"
+    },
+    {
+      "description": "MCP server discovery",
+      "name": "MCP"
     },
     {
       "description": "Service catalogue management for businesses",
