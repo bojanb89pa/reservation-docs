@@ -744,6 +744,12 @@
               "null"
             ]
           },
+          "clientRequestId": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
           "endTime": {
             "format": "date-time",
             "type": "string"
@@ -778,9 +784,16 @@
           "origin": {
             "enum": [
               "RESERVA_APP",
-              "CLIENT_APPLICATION"
+              "CLIENT_APPLICATION",
+              "AI_ASSISTANT"
             ],
             "type": "string"
+          },
+          "originClient": {
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "resource": {
             "oneOf": [
@@ -892,6 +905,19 @@
             "example": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
             "format": "uuid",
             "type": "string"
+          },
+          "origin": {
+            "description": "Channel that created the reservation: RESERVA_APP, CLIENT_APPLICATION (partner) or AI_ASSISTANT (MCP client such as Claude)",
+            "example": "AI_ASSISTANT",
+            "type": "string"
+          },
+          "originClient": {
+            "description": "Name of the AI assistant client that booked (for example Claude); null unless origin is AI_ASSISTANT",
+            "example": "Claude",
+            "type": [
+              "string",
+              "null"
+            ]
           },
           "resource": {
             "oneOf": [
