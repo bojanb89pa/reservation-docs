@@ -42,6 +42,7 @@ nav:
   - Guides:
       - Partner integration: guides/partner-integration.md
       - Booking widget: guides/widget.md
+      - AI assistants (MCP): guides/mcp.md
   - API reference: reference/index.md
   - Changelog: changelog.md
 
