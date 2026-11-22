@@ -81,8 +81,21 @@ curl -H "Accept-Language: en" "https://reserva.bojanlab.com/api/businesses/2b187
 curl -H "Accept-Language: en" "https://reserva.bojanlab.com/api/business-categories/a0000000-0000-0000-0000-000000000001"
 ```
 
-The business response includes `id`, `name`, `categoryId`, the localized `category`, `imageUrl` and
-`status`. The category response includes `id`, `name`, `parentId`, `color` and `symbol`.
+The business response includes `id`, `name`, `categoryId`, the localized `category`, `imageUrl`,
+`status` and `minNoticeMinutes`.
+
+`minNoticeMinutes` is the cancellation deadline of the business: the minimum number of minutes before the
+start of a slot that a reservation can still be cancelled. It is `null` when the business has no deadline,
+and then cancelling is allowed until the slot starts. The field is also in the business objects returned by
+`GET /api/businesses/search` and `GET /api/businesses/category/{categoryId}`. After the deadline, cancelling
+is rejected with `422` and the error code `error.reservation.cancellation_deadline_passed`; the message is
+localized with `Accept-Language`.
+
+```json
+{ "id": "2b187165-3c35-4d6f-9edf-a9ec7dc73afe", "status": "ACTIVE", "minNoticeMinutes": 1440 }
+```
+
+The category response includes `id`, `name`, `parentId`, `color` and `symbol`.
 
 ### 2. Read locations, services and resources
 

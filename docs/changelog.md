@@ -3,6 +3,18 @@
 Entries are newest first. A breaking change is marked **Breaking** at the top of its entry. During the
 preview there is no deprecation period.
 
+## 0.5.0 — 2026-11-22
+
+Business responses show the cancellation deadline of the business. There are no breaking changes.
+
+- Changed: the business response has a new nullable field `minNoticeMinutes`, the minimum number of minutes
+  before the start of a slot that a reservation can be cancelled. `null` means no deadline, as before. It
+  appears in `GET /api/businesses/{id}`, `GET /api/businesses/search` and
+  `GET /api/businesses/category/{categoryId}`. Requests are unchanged.
+- Cancelling a reservation after the deadline is rejected with `422` and the error code
+  `error.reservation.cancellation_deadline_passed`. Businesses without a deadline behave as before.
+  See [Getting started](getting-started.md).
+
 ## 0.4.0 — 2026-11-20
 
 Reserva can be connected to AI assistants through an MCP server, and reservation responses show where a
