@@ -72,6 +72,13 @@
             },
             "type": "array",
             "uniqueItems": true
+          },
+          "minNoticeMinutes": {
+            "format": "int32",
+            "type": [
+              "integer",
+              "null"
+            ]
           }
         },
         "type": "object"
@@ -267,6 +274,15 @@
           "imageUrl": {
             "type": [
               "string",
+              "null"
+            ]
+          },
+          "minNoticeMinutes": {
+            "description": "Minimum number of minutes before the reservation start by which it must be cancelled; null means no deadline",
+            "example": 1440,
+            "format": "int32",
+            "type": [
+              "integer",
               "null"
             ]
           },
