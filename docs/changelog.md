@@ -3,6 +3,16 @@
 Entries are newest first. A breaking change is marked **Breaking** at the top of its entry. During the
 preview there is no deprecation period.
 
+## 0.6.0 — 2026-11-22
+
+A public auth endpoint that accepted unverified Google profile data is removed.
+
+- **Breaking**: removed `POST /auth/users/google-sign-in`. It trusted the profile fields in the request body
+  without verifying a Google ID token, so it is no longer available; requests to it return `401` or `404`.
+  Google sign-in through the OpenID Connect redirect flow on the Reserva login page is unchanged. To
+  authenticate partner users with Google, use the token exchange described in
+  [Partner integration](guides/partner-integration.md).
+
 ## 0.5.0 — 2026-11-22
 
 Business responses show the cancellation deadline of the business. There are no breaking changes.
