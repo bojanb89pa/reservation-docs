@@ -10,6 +10,8 @@ A guide that describes an endpoint which is not deployed yet fails this check. T
 docs pull request stays red until the backend change reaches staging and the sync workflow refreshes
 the documents.
 
+docs/changelog.md is not checked: it is a history, so it names endpoints that were removed later.
+
 OPENAPI_DIR overrides the directory with resource.json and auth.json. The PR check points it at the
 documents on the tip of main, so a re-run after a sync sees the new endpoints.
 """
@@ -23,6 +25,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 DOCS = ROOT / "docs"
 SPEC_DIR = Path(os.environ.get("OPENAPI_DIR") or DOCS / "openapi")
+SKIP = {DOCS / "changelog.md"}
 SPECS = {"/api": SPEC_DIR / "resource.json", "/auth": SPEC_DIR / "auth.json"}
 METHODS = ("GET", "POST", "PUT", "PATCH", "DELETE")
 MENTION = re.compile(r"`(" + "|".join(METHODS) + r") (/[^`\s?#]*)`")
@@ -51,6 +54,8 @@ def main() -> int:
     errors = []
     checked = 0
     for md in sorted(DOCS.rglob("*.md")):
+        if md in SKIP:
+            continue
         for lineno, line in enumerate(md.read_text(encoding="utf-8").splitlines(), start=1):
             for method, full_path in MENTION.findall(line):
                 checked += 1
