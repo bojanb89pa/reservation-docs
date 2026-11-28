@@ -3,6 +3,16 @@
 Entries are newest first. A breaking change is marked **Breaking** at the top of its entry. During the
 preview there is no deprecation period.
 
+## 0.7.0 — 2026-11-28
+
+Messages can be sent to the Reserva team through a public contact endpoint. There are no breaking changes.
+
+- New: `POST /auth/contact` sends a contact message. It needs no token; with a valid token the message is
+  linked to the signed-in user. The body has `name`, `email`, `category` (`GENERAL`, `PRIVACY`, `BUSINESS`
+  or `BUG`), `message` and an optional `honeypot` field that must stay empty. It returns `204` with no
+  body. Invalid input returns `400`; too many messages from one IP address return `429` with the error
+  code `error.contact_message.rate_limit_exceeded`. See [Contact form](guides/contact.md).
+
 ## 0.6.0 — 2026-11-22
 
 A public auth endpoint that accepted unverified Google profile data is removed.
